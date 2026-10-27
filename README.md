@@ -72,7 +72,89 @@ User authentication mechanisms are essential to ensure secure and authorized acc
 Client-server chat applications are versatile tools that facilitate real-time communication between users over a network. They incorporate various components, including server-side and client-side elements, and must consider factors such as security, scalability, and concurrency. As technology continues to advance, client-server chat applications remain integral for collaborative communication in various domains.
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
+## program:
+## 1.client:
+```
+import socket
 
+s = socket.socket()
+
+host = input("Enter hostname or host IP: ")
+port = 8080
+
+s.connect((host, port))
+
+print("Connected to chat server")
+
+while True:
+    incoming_message = s.recv(1024).decode()
+
+    if not incoming_message:
+        print("Server disconnected.")
+        break
+
+    print("Server:", incoming_message)
+    print()
+
+    message = input(">> ")
+    s.send(message.encode())
+
+    print("Sent")
+    print()
+
+s.close()
+```
+## 2.server:
+```
+import socket
+
+s = socket.socket()
+
+host = socket.gethostname()
+print("Server will start on host:", host)
+
+port = 8080
+s.bind((host, port))
+
+print()
+print("Waiting for connection...")
+print()
+
+s.listen(1)
+
+conn, addr = s.accept()
+
+print(addr, "has connected to the server")
+print()
+
+while True:
+    message = input(">> ")
+
+    if message.lower() == "exit":
+        conn.close()
+        break
+
+    conn.send(message.encode())
+    print("Sent")
+    print()
+
+    incoming_message = conn.recv(1024).decode()
+
+    if not incoming_message:
+        print("Client disconnected.")
+        break
+
+    print("Client:", incoming_message)
+    print()
+
+s.close()
+```
+## output:
+## 1.client:
+<img width="508" height="227" alt="Screenshot 2026-10-27 084417" src="https://github.com/user-attachments/assets/96e5e669-f2ed-4fa5-a070-dd6688030762" />
+
+## 2.server:
+<img width="497" height="315" alt="Screenshot 2026-10-27 084408" src="https://github.com/user-attachments/assets/7fb77c43-6ea0-49d9-a3eb-291bbc679617" />
 
 ## Result:
 
